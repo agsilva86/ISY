@@ -1,0 +1,41 @@
+/*classes prontas*/
+.margemtop20{
+    margin-top: 20px;
+}
+.margemtop25{
+    margin-top: 25px;
+    }
+.margemtop50{
+    margin-top: 50px;
+    }
+.margemtop75{
+    margin-top: 75px;
+    }
+.margemtop100{
+    margin-top: 100px;
+}
+
+.profileicon{
+    margin-right: 0px;
+}
+
+/*posicao*/
+.footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+ /*esconder o conteudo enquanto nao esta em tela de celular*/
+.esconder{
+    display:none;
+}
+
+@media only screen and (max-width: 600px) {
+    /*mostrar o conteudo em tela de celular*/
+    .esconder{
+       display:block; 
+    }
+  }
