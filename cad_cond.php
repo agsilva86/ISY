@@ -15,6 +15,83 @@
 /*Conectado ao Banco*/
 include "conn.php";
 
+/* validacao para nao salvar um condominio sem cep*/
+if(!$_POST['cep']== NULL){ 
+    if(!$_POST['nomecond']== NULL){
+        if(!$_POST['numcond']== NULL){
+                /*DADOS DO ENDEREÇO*/
+                if(isset($_POST['enviar'])){
+                    //dados condominio para salvar no banco
+                    $cond=$_POST['nomecond'];
+                    $rua=$_POST['rua'];
+                    $numcond=$_POST['numcond'];
+                    $bairro=$_POST['bairro'];
+                    $cidade=$_POST['cidade'];
+                    $cep=$_POST['cep'];
+                    $estado=$_POST['estado'];
+                    $enviar_end=$conn->prepare('INSERT INTO `condominio` (`id_cond`, `nome_cond`, `rua_cond`, `num_cond`,   `bairro_cond`,            `cidade_cond`, `cep_cond`, `uf_cond`) 
+                    VALUES (NULL, :pnomecond, :prua, :pnumcond, :pbairro, :pcidade, :pcep, :pestado);');
+                    $enviar_end->bindValue(':pnomecond',$cond);
+                    $enviar_end->bindValue(':prua',$rua);
+                    $enviar_end->bindValue(':pnumcond',$numcond);
+                    $enviar_end->bindValue(':pbairro',$bairro);
+                    $enviar_end->bindValue(':pcidade',$cidade);
+                    $enviar_end->bindValue(':pcep',$cep);
+                    $enviar_end->bindValue(':pestado',$estado);
+                    $enviar_end->execute();
+                    
+                    $id_condominio=$conn->lastInsertID();
+                    
+                    $nome=$_POST['nomecond'];
+                    $_UP['pasta']="arquivos/";
+                    $_UP['tamanho']=1024*1024*5; //5mb
+                    $_UP['extensao']=array('pdf');
+                
+                    //validação de extenção
+                    $explode=explode('.',$_FILES['arquivo']['name']);
+                    $aponta=end($explode);
+                    $extensao=strtolower($aponta);
+                    if(array_search($extensao,$_UP['extensao'])
+                    ===false){
+                        echo "Extensão não aceita";
+                        exit();
+                    }
+                
+                    //validação de tamanho de arquivo
+                    if($_UP['tamanho']<=$_FILES['arquivo']['size']){
+                        echo "Arquivo muito grande";
+                        exit();
+                    }
+                    
+                    $nome_final=$_FILES['arquivo']['name'];
+                    //Envio do Arquivo
+                    if(move_uploaded_file($_FILES['arquivo']['tmp_name'],$_UP['pasta'].$nome_final)){
+                        include "conn.php";
+                        
+                        $tipo='ATA'; 
+                        $desc='ATA do condominio: '.$_POST['nomecond'];
+                        $dia=date('Y/m/d');
+                        $url=$_UP['pasta'].$nome_final;
+                
+                        $envia_ata=$conn->prepare('INSERT INTO `documentos` (`id_doc`, `condominio_id_cond`, `cadastro_id_cad`, `desc_docs`, `num_docs`, `tipo_docs`, `datap_docs`, `url_docs`) 
+                        VALUES (NULL, :pid_cond, :pid_cad, :pdesc, :pnumero_doc, :ptipo, :pdia, :purl); ');
+                        $envia_ata->bindValue(':pid_cond', $id_condominio);
+                        $envia_ata->bindValue(':pid_cad', $id_cad);
+                        $envia_ata->bindValue(':pnumero_doc', $id_condominio);//numero do cond -> colocado até saber oque realmente deve-se colocar
+                        $envia_ata->bindValue(':ptipo', $tipo);
+                        $envia_ata->bindValue(':pdesc', $desc);
+                        $envia_ata->bindValue(':pdia', $dia);
+                        $envia_ata->bindValue(':purl', $url);
+                        $envia_ata->execute();
+                        echo "/Arq Gravado com sucesso!";
+                    }else{
+                        echo "/Algo deu errado com seu Arq!";
+                    }
+                }
+        }        
+    } 
+}
+
 //SALVAR DADOS NA TABELA CADASTRO   
 if(isset($_POST['enviar'])){
     //dados usuario para salvar no banco
@@ -79,8 +156,7 @@ if(isset($_POST['enviar'])){
     }
     $tipo_usu=$_POST['periodo'];
 
-    $cadastrar_usu= $conn->prepare('INSERT INTO cadastro (condominio_id_cond, tiposdeusuario_id_tpusu, nome_cad,cpf_cad,unid_cad,bloco_cad, email_cad, senha_cad) 
-    VALUES (:pid_cond,:ptipo,:pnome,:pcpf,:punid,:pbloco,:pemail,md5(:psenha))');
+    $cadastrar_usu= $conn->prepare('INSERT INTO cadastro (condominio_id_cond, tiposdeusuario_id_tpusu, nome_cad,cpf_cad,unid_cad,bloco_cad, email_cad, senha_cad) VALUES (:pid_cond,:ptipo,:pnome,:pcpf,:punid,:pbloco,:pemail,md5(:psenha))');
     $cadastrar_usu->bindValue(':pid_cond',$id_cond);
     $cadastrar_usu->bindValue(':ptipo',$tipo_usu);
     $cadastrar_usu->bindValue(':pnome',$nome_usu);
