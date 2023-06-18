@@ -1,0 +1,47 @@
+.nav-menu {
+  padding: 10px;
+}
+
+.nav-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column; /* configura o menu como coluna */
+  justify-content: center;
+  align-items: stretch; /* estica os itens verticalmente */
+}
+
+.nav-menu li {
+  margin: 5px;
+}
+
+.nav-menu a {
+  display: flex; /* adiciona flexbox ao elemento para ajustar o tamanho */
+  flex: 1; /* estica o botão horizontalmente */
+  padding: 10px;
+  background-color: #ffffff;
+  color: #333;
+  text-decoration: none;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+@media (min-width: 768px) {
+  .nav-menu ul {
+    flex-direction: row; /* configura o menu como linha em telas maiores */
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .nav-menu a {
+    flex: none; /* remove a esticagem horizontal dos botões */
+    padding: 10px 20px; /* aumenta o padding para dar mais espaço */
+  }
+  
+  .nav-menu li {
+    margin: 0 10px;
+  }
+}

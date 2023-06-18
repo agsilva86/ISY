@@ -80,7 +80,6 @@ function HabCampos() {
   if (document.getElementById('periodo_sim').checked) {
     document.getElementById('campos').style.display = "block";
     document.getElementById('usu').style.display = "none";
-document.getElementById('textfield').focus();
   }  else {
     document.getElementById('campos').style.display = "none";
     document.getElementById('usu').style.display = "block";
@@ -132,12 +131,12 @@ document.getElementById('textfield').focus();
                     <!--Sindico-->
                     <div class="form-check">
               <label for="proprietario" class="form-label">Você é o Sindico?</label><br>
-                <input name="periodo" id="periodo_nao" type="radio" value="2" onClick="HabCampos()" checked/>
+                <input name="periodo" id="periodo_nao" type="radio" value="2" onclick="HabCampos()" checked/>
                     <!--Não-->
                     <label class="form-check-label" for="sindico1">Não</label>
             </div>
             <div class="form-check">
-                <input name="periodo" id="periodo_sim" type="radio" value="1" onClick="HabCampos()"/>
+                <input name="periodo" id="periodo_sim" type="radio" value="1" onclick="HabCampos()"/>
                     <!--Sim-->
                     <label class="form-check-label" for="sindico2">Sim</label>
             </div></br>
@@ -173,6 +172,34 @@ document.getElementById('textfield').focus();
         ?>
         </select></br>
         <div>
+        </fieldset>
+        <fieldset id="campos">
+          <legend>Dados de Endereço do Condominio</legend>
+          <form method="get" action=".">
+            <!--ATA-->
+            <label for="ata" class="form-label">ATA:</label>
+                <input class="form-control" type="file" id="ata" name="arquivo"><br>
+            <!--Nome do Condominio-->
+            <label for="unidade" class="form-label">Nome do Condominio:</label><br>
+            <input class="form-control" type="text" id="unidade" name="nomecond"><br/>
+            <!--cep-->
+            <label for="cep" class="form-label">CEP: </label><br/>
+                <input class="form-control" type="text" id="cep" name="cep" onblur="pesquisacep(this.value);"><br/>
+            <!--rua-->    
+            <label for="rua" class="form-label">Rua:</label><br/>
+                <input class="form-control" type="text" id="rua" name="rua"><br/>
+            <!--bairro-->    
+            <label for="bairro" class="form-label">Bairro:</label><br/>
+                <input class="form-control" type="text" id="bairro" name="bairro"><br/>
+            <!--estado-->    
+            <label for="bairro" class="form-label">Estado:</label><br/>
+                <input class="form-control" type="text" id="uf" name="estado"><br/>
+            <!--cidade-->
+            <label for="cidade" class="form-label">Cidade: </label><br/>
+                <input class="form-control" type="text" id="cidade" name="cidade" ><br/>
+            <!--numero-->    
+            <label for="numero" class="form-label">Numero:</label><br/>
+                <input class="form-control" type="number" name="numcond"><br/>
         </fieldset>
         <!--Enviar-->
       <label for="senha" class="form-label">Terminou?</label><br>
